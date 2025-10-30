@@ -12,6 +12,7 @@ interface ChartDataState {
   error?: string;
   lastUpdated?: string;
   setCandles: (candles: Candle[]) => void;
+  upsertCandle: (candle: Candle) => void;
   setQuote: (quote: Quote) => void;
   setCandlesLoading: (value: boolean) => void;
   setQuoteLoading: (value: boolean) => void;
@@ -32,6 +33,24 @@ export const useChartDataStore = create<ChartDataState>()(
           candles,
           candlesLoading: false,
           lastUpdated: new Date().toISOString(),
+        }),
+      upsertCandle: (candle) =>
+        set((state) => {
+          const existingIndex = state.candles.findIndex(
+            (item) => item.time === candle.time,
+          );
+          const nextCandles =
+            existingIndex >= 0
+              ? state.candles.map((item, index) =>
+                  index === existingIndex ? candle : item,
+                )
+              : [...state.candles, candle];
+
+          return {
+            candles: nextCandles,
+            candlesLoading: false,
+            lastUpdated: new Date().toISOString(),
+          };
         }),
       setQuote: (quote) =>
         set({

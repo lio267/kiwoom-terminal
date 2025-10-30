@@ -1,10 +1,8 @@
 'use client';
 
-import { useHistoricalData, useRealtimeQuote } from "@/hooks/useKiwoomData";
+import { useKiwoomStream } from "@/hooks/useKiwoomStream";
 
 export default function ChartClient() {
-  useHistoricalData();
-  useRealtimeQuote();
-
+  useKiwoomStream();
   return null;
 }
